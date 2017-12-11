@@ -9,6 +9,11 @@
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
 
+
+version = '0.3a'
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use jcenter for resolving your dependencies.
@@ -27,3 +32,13 @@ dependencies {
     // testImplementation 'junit:junit:4.12'
 }
 
+
+
+sourceSets.main.resources { srcDirs = ["src/main/java"]; exclude "**/*.java" }
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Mishmash Library',
+        	'Implementation-Version': version,
+        	'Main-Class': 'net.janbuchinger.code.mishmash.demo.Demo'
+    }
+}
