@@ -24,7 +24,7 @@ package net.janbuchinger.code.mishmash.dbo;
  * @see DBO2Label DBO2Label (two ids and one label)
  * @see DBOLabel DBOLabel (one id and one label)
  */
-public abstract class DBO2Label2 extends DBO2Label {
+public class DBO2Label2 extends DBO2Label {
 	private final String labelId2;
 
 	/**
