@@ -211,7 +211,7 @@ public final class DateTimeField extends JFormattedTextField implements KeyListe
 	 * Gets the time when using <code>TIME</code> mode. Use this method instead of
 	 * #getTime() for a more accurate result.
 	 * 
-	 * @return
+	 * @return The time in millis starting from 00:00 that day.
 	 */
 	public final long getTimeOfDay() {
 		try {
