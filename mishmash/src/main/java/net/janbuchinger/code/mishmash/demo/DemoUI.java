@@ -49,7 +49,6 @@ import net.janbuchinger.code.mishmash.ui.userInput.DoubleTextField;
 import net.janbuchinger.code.mishmash.ui.userInput.FolderPathTextField;
 import net.janbuchinger.code.mishmash.ui.userInput.JTextFieldWithPopUp;
 
-
 public final class DemoUI implements ActionListener {
 
 	private final JFrame frm;
@@ -84,12 +83,13 @@ public final class DemoUI implements ActionListener {
 						+ "</html>");
 		JTextPane tpDateTimeField2 = getTextPane(uiPanel);
 		tpDateTimeField2.setText("<html>"
-				+ "<p>Input only the numerical values, other character appear automatically.</p>"
+				+ "<p>Input only the numerical values, other characters appear automatically.</p>"
 				+ "<p>When focused all text is selected to be overwritten.</p>"
 				+ "<p>when the focus is lost, a missing part at the end of the date string is filled in"
 				+ " with the previous string.</p>"
 				+ "<p>DateTimeField has the functions long getTime() and setTime(long time) to "
 				+ "interact with it.</p>"
+				+ "<p>Use DateTimeField.getTimeOfDay() when in DateTimeField.TIME mode.</p>"
 				+ "<p>DateTimeField can be constructed with optionally a keylistener to be added "
 				+ "for registering changes.</p>"
 				+ "<p>DateTimeField can be constructed with optionally a label string to construct "
@@ -133,9 +133,9 @@ public final class DemoUI implements ActionListener {
 				+ "behaviour.</p>" + "</html>");
 
 		JTextPane tpInfoDialog = getTextPane(uiPanel);
-		tpInfoDialog.setText("<html><h2>InfoDialog</h2>"
-				+ "<p>InfoDialog is a JDialog that displays a html file.</p>"
-				+ "<p>Custom CSS rules can be defined.</p>" + "</html>");
+		tpInfoDialog.setText(
+				"<html><h2>InfoDialog</h2>" + "<p>InfoDialog is a JDialog that displays a html file.</p>"
+						+ "<p>Custom CSS rules can be defined.</p>" + "</html>");
 
 		JTextPane tpDirChooserDialog = getTextPane(uiPanel);
 		tpDirChooserDialog.setText("<html><h2>DirChooserDialog</h2>"
@@ -201,13 +201,18 @@ public final class DemoUI implements ActionListener {
 		 */
 		JTextPane tpDBOLabelListModel = getTextPane(uiPanel);
 		tpDBOLabelListModel.setText("<html><h2>DBOLabelListModel</h2>"
-				+ "<p>DBOLabelListModel implements AbstractListModel for use with JList of DBOLabels.</p>" + "</html>");
-
+				+ "<p>DBOLabelListModel implements AbstractListModel for use with JList of DBOLabels.</p>"
+				+ "</html>");
 
 		JTextPane tpDBO2LabelListModel = getTextPane(uiPanel);
 		tpDBO2LabelListModel.setText("<html><h2>DBO2LabelListModel</h2>"
-				+ "<p>DBO2LabelListModel implements AbstractListModel for use with JList of DBO2Labels.</p>" + "</html>");
+				+ "<p>DBO2LabelListModel implements AbstractListModel for use with JList of DBO2Labels.</p>"
+				+ "</html>");
 
+		JTextPane tpStringListModel = getTextPane(uiPanel);
+		tpStringListModel.setText("<html><h2>StringListModel</h2>"
+				+ "<p>StringListModel implements AbstractListModel for use with JList of Strings.</p>"
+				+ "</html>");
 
 		/*
 		 * Text Pane for ImagePanel
@@ -218,6 +223,21 @@ public final class DemoUI implements ActionListener {
 				+ "<p>The image should be set after the component is displayed.</p>"
 				+ "<p class=\"last\">Use setPreferredSize() to set the viewport, the image will be scaled "
 				+ "and centered accordingly.</p>" + "</html>");
+
+		/*
+		 * Text Pane for FileFilters
+		 */
+		JTextPane tpDirFileFilter = getTextPane(uiPanel);
+		tpDirFileFilter.setText("<html><h2>DirectoryFileFilter</h2>"
+				+ "<p>File.listFiles(new DirectoryFileFilter()) will list all directories.</p>"
+				+ "<p>File.listFiles(new DirectoryFileFilter(false)) will list all directories, excluding hidden.</p>" + "</html>");
+		JTextPane tpExtensionFileFilter = getTextPane(uiPanel);
+		tpExtensionFileFilter.setText("<html><h2>ExtensionFileFilter</h2>"
+				+ "<p>File.listFiles(new ExtensionFileFilter(\".jpg\") will list all files ending with "
+				+ "\".jpg\", including hidden files</p>"
+				+ "<p>File.listFiles(new ExtensionsFileFilter(new String[] {\".jpg\", \".jpeg\"}, false) will list "
+				+ "all files<br>ending with \".jpg\" or \".jpeg\", excluding hidden files.</p>"
+				+ "<p>comparison is case insensitive.</p>" + "</html>");
 
 		/*
 		 * Components
@@ -335,6 +355,9 @@ public final class DemoUI implements ActionListener {
 		c.gridy++;
 		dialogPanel.add(pnDirChooserDialogButtons, c);
 
+		/*
+		 * FX Classes
+		 */
 		JPanel fxPanel = new JPanel(new GridBagLayout());
 		c = UIFx.initGridBagConstraints();
 		c.weightx = 1;
@@ -348,6 +371,9 @@ public final class DemoUI implements ActionListener {
 		c.gridy++;
 		fxPanel.add(tpUIFx, c);
 
+		/*
+		 * Database classes
+		 */
 		JPanel dboPanel = new JPanel(new GridBagLayout());
 		c = UIFx.initGridBagConstraints();
 		c.weightx = 1;
@@ -360,20 +386,38 @@ public final class DemoUI implements ActionListener {
 		dboPanel.add(tpDBO2Label, c);
 		c.gridy++;
 		dboPanel.add(tpDBO2Label2, c);
-		
+
+		/*
+		 * Models
+		 */
 		JPanel modelPanel = new JPanel(new GridBagLayout());
 		c = UIFx.initGridBagConstraints();
 		c.weightx = 1;
 		modelPanel.add(tpDBOLabelListModel, c);
 		c.gridy++;
 		modelPanel.add(tpDBO2LabelListModel, c);
+		c.gridy++;
+		modelPanel.add(tpStringListModel, c);
 
+		/*
+		 * ImagePanel
+		 */
 		JPanel imgPanel = new JPanel(new GridBagLayout());
 		c = UIFx.initGridBagConstraints();
 		c.weightx = 1;
 		imgPanel.add(tpImagePanel, c);
 		c.gridy++;
 		imgPanel.add(imagePanel, c);
+
+		/*
+		 * FileFiler s
+		 */
+		JPanel fileFiltersPanel = new JPanel(new GridBagLayout());
+		c = UIFx.initGridBagConstraints();
+		c.weightx = 1;
+		fileFiltersPanel.add(tpDirFileFilter, c);
+		c.gridy++;
+		fileFiltersPanel.add(tpExtensionFileFilter, c);
 
 		JTabbedPane tpDemo = new JTabbedPane();
 		JPanel uiPanelBorder = new JPanel(new BorderLayout());
@@ -405,11 +449,16 @@ public final class DemoUI implements ActionListener {
 		modelPanelBorder.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		tpDemo.add(UIFx.initScrollPane(modelPanelBorder, 15), "Models");
 		tpDBOLabelListModel.setCaretPosition(0);
-		
+
 		JPanel imgPanelBorder = new JPanel(new BorderLayout());
 		imgPanelBorder.add(imgPanel, BorderLayout.NORTH);
 		imgPanelBorder.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		tpDemo.add(UIFx.initScrollPane(imgPanelBorder, 15), "ImagePanel");
+
+		JPanel fileFiltersPanelBorder = new JPanel(new BorderLayout());
+		fileFiltersPanelBorder.add(fileFiltersPanel, BorderLayout.NORTH);
+		fileFiltersPanelBorder.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		tpDemo.add(UIFx.initScrollPane(fileFiltersPanelBorder, 15), "FileFilters");
 
 		JPanel pnContent = new JPanel(new BorderLayout());
 		pnContent.add(tpDemo, BorderLayout.CENTER);
@@ -447,8 +496,9 @@ public final class DemoUI implements ActionListener {
 			dcd.setVisible(true);
 			JPanel message = new JPanel(new GridLayout(2, 1));
 			message.add(new JLabel("DirChooseDialog getAnswer() equals: "
-					+ (dcd.getAnswer() == DirChooserDialog.CANCEL ? "DirChooserDialog.CANCEL" : (dcd
-							.getAnswer() == DirChooserDialog.OK ? "DirChooserDialog.OK" : dcd.getAnswer()))));
+					+ (dcd.getAnswer() == DirChooserDialog.CANCEL ? "DirChooserDialog.CANCEL"
+							: (dcd.getAnswer() == DirChooserDialog.OK ? "DirChooserDialog.OK"
+									: dcd.getAnswer()))));
 			message.add(new JLabel("DirChooseDialog getPath() returned: " + dcd.getPath()));
 			JOptionPane.showMessageDialog(frm, message, "DirChooserDialog result",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -457,8 +507,9 @@ public final class DemoUI implements ActionListener {
 			dcd.setVisible(true);
 			JPanel message = new JPanel(new GridLayout(3, 1));
 			message.add(new JLabel("DirChooseDialog getRAnswer() equals: "
-					+ (dcd.getAnswer() == DirChooserDialog.CANCEL ? "DirChooserDialog.CANCEL" : (dcd
-							.getAnswer() == DirChooserDialog.OK ? "DirChooserDialog.OK" : dcd.getAnswer()))));
+					+ (dcd.getAnswer() == DirChooserDialog.CANCEL ? "DirChooserDialog.CANCEL"
+							: (dcd.getAnswer() == DirChooserDialog.OK ? "DirChooserDialog.OK"
+									: dcd.getAnswer()))));
 			message.add(new JLabel("DirChooseDialog getRelativePath() returned: " + dcd.getRelativePath()));
 			message.add(new JLabel("DirChooseDialog getPath() returned: " + dcd.getPath()));
 			JOptionPane.showMessageDialog(frm, message, "DirChooserDialog result",
