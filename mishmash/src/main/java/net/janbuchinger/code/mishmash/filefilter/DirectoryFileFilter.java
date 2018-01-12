@@ -27,11 +27,31 @@ import java.io.FileFilter;
  * @see File#listFiles(FileFilter)
  */
 public class DirectoryFileFilter implements FileFilter {
+	private final boolean acceptHidden;
+
 	/**
-	 * Accepts all directories.
+	 * Constructs a new <code>DirectoryFileFilter</code> that accepts all
+	 * directories.
+	 */
+	public DirectoryFileFilter() {
+		acceptHidden = true;
+	}
+
+	/**
+	 * Constructs a new <code>DirectoryFileFilter</code> that accepts all
+	 * directories with a name not beginning with &quot;.&quot;.
+	 */
+	public DirectoryFileFilter(boolean acceptHidden) {
+		this.acceptHidden = acceptHidden;
+	}
+
+	/**
+	 * Depending on the on construction specified boolean filters hidden directories
+	 * (name beginning with &quot;.&quot;) or not.
 	 */
 	@Override
 	public boolean accept(File pathname) {
-		return pathname.isDirectory();
+		return acceptHidden ? pathname.isDirectory()
+				: pathname.isDirectory() && !pathname.getName().startsWith(".");
 	}
 }

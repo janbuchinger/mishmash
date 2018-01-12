@@ -43,6 +43,7 @@ import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import net.janbuchinger.code.mishmash.filefilter.DirectoryFileFilter;
 import net.janbuchinger.code.mishmash.ui.UIFx;
 import net.janbuchinger.code.mishmash.ui.dialog.DialogEscapeHook;
 import net.janbuchinger.code.mishmash.ui.userInput.JTextFieldWithPopUp;
@@ -308,7 +309,7 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 	}
 
 	private final File[] lsDirs(File f) {
-		File[] dirs = f.listFiles(new DirFileFilter(treePopupMenu.showHiddenFolders()));
+		File[] dirs = f.listFiles(new DirectoryFileFilter(treePopupMenu.showHiddenFolders()));
 		if (dirs != null)
 			Arrays.sort(dirs);
 		return dirs;
