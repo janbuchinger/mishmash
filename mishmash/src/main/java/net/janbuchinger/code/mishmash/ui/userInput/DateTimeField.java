@@ -166,8 +166,9 @@ public final class DateTimeField extends JFormattedTextField implements KeyListe
 	 * @see #getLabel()
 	 */
 	public DateTimeField(Date date, String label, KeyListener kl, int mode) {
-		super(new SimpleDateFormat(mode >= 0 ? (mode == DATE ? dateFormat : (mode == TIME ? timeFormat
-				: dateTimeFormat)) : dateTimeFormat));
+		super(new SimpleDateFormat(
+				mode >= 0 ? (mode == DATE ? dateFormat : (mode == TIME ? timeFormat : dateTimeFormat))
+						: dateTimeFormat));
 		this.mode = mode;
 		if (mode == TIME)
 			this.sdf = new SimpleDateFormat(timeFormat);
@@ -203,6 +204,22 @@ public final class DateTimeField extends JFormattedTextField implements KeyListe
 			return sdf.parse(getText()).getTime();
 		} catch (ParseException e) {
 			return new Date().getTime();
+		}
+	}
+
+	/**
+	 * Gets the time when using <code>TIME</code> mode. Use this method instead of
+	 * #getTime() for a more accurate result.
+	 * 
+	 * @return
+	 */
+	public final long getTimeOfDay() {
+		try {
+			Date dateEntered = sdf.parse(getText());
+			SimpleDateFormat sdf2 = new SimpleDateFormat(dateFormat);
+			return dateEntered.getTime() - sdf2.parse(sdf2.format(dateEntered)).getTime();
+		} catch (ParseException e) {
+			return 0;
 		}
 	}
 
