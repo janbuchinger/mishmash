@@ -69,7 +69,7 @@ public final class DBFx {
 				list = list.substring(0, list.length() - 2);
 			if (list.startsWith(","))
 				list = list.substring(1);
-			return list.split(",");
+			return list.trim().split(",");
 		} else {
 			return new String[0];
 		}
