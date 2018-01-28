@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Jan Buchinger
+ * Copyright 2017-2018 Jan Buchinger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import javax.swing.JPanel;
 import net.janbuchinger.code.mishmash.ui.UIFx;
 import net.janbuchinger.code.mishmash.ui.dialog.dirChooser.DirChooserDialog;
 
-
 /**
  * <code>FolderPathTextField</code> combines <code>DirChooserDialog</code> with
  * a <code>JTextFieldWithPopUp</code> to enable easy directory choice.
@@ -41,6 +40,7 @@ import net.janbuchinger.code.mishmash.ui.dialog.dirChooser.DirChooserDialog;
  * 
  * @see JTextFieldWithPopUp
  * @see net.janbuchinger.code.mishmash.ui.dialog.dirChooser.DirChooserDialog
+ * @see FilePathTextField
  */
 @SuppressWarnings("serial")
 public class FolderPathTextField extends JPanel implements ActionListener {
@@ -49,13 +49,12 @@ public class FolderPathTextField extends JPanel implements ActionListener {
 	private final Window w;
 
 	/**
-	 * Constructs a new <code>FolderPathTextField</code> with text field width =
-	 * 35.
+	 * Constructs a new <code>FolderPathTextField</code> with text field width = 35.
 	 * 
 	 * @param w
-	 *            should be instance of <code>Frame</code> or
-	 *            <code>Dialog</code>. If this doesn't apply the
-	 *            <code>DirChooserDialog</code> will not show.
+	 *            should be instance of <code>Frame</code> or <code>Dialog</code>.
+	 *            If this doesn't apply the <code>DirChooserDialog</code> will not
+	 *            show.
 	 *            <p>
 	 *            The <code>Window</code> is required for the modality of
 	 *            <code>DirChooserDialog</code>.
@@ -68,9 +67,9 @@ public class FolderPathTextField extends JPanel implements ActionListener {
 	 * Constructs a new <code>FolderPathTextField</code>.
 	 * 
 	 * @param w
-	 *            should be instance of <code>Frame</code> or
-	 *            <code>Dialog</code>. If this doesn't apply the
-	 *            <code>DirChooserDialog</code> will not show.
+	 *            should be instance of <code>Frame</code> or <code>Dialog</code>.
+	 *            If this doesn't apply the <code>DirChooserDialog</code> will not
+	 *            show.
 	 *            <p>
 	 *            The <code>Window</code> is required for the modality of
 	 *            <code>DirChooserDialog</code>.
@@ -110,8 +109,8 @@ public class FolderPathTextField extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Gets rid of any trailing slashes and checks if the path is not a file. If
-	 * the path is a file then its parent directory is set and returned.
+	 * Gets rid of any trailing slashes and checks if the path is not a file. If the
+	 * path is a file then its parent directory is set and returned.
 	 * 
 	 * @return The path to the selected directory without trailing slashes.
 	 */
@@ -131,5 +130,14 @@ public class FolderPathTextField extends JPanel implements ActionListener {
 	 */
 	public void setPath(String path) {
 		tfPath.setText(path);
+	}
+
+	/**
+	 * Gets the <code>JTextFieldWithPopUp</code> containing the file path.
+	 * 
+	 * @return The <code>JTextFieldWithPopUp</code> containing the file path.
+	 */
+	public final JTextFieldWithPopUp getTextField() {
+		return tfPath;
 	}
 }
