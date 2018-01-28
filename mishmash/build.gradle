@@ -10,10 +10,11 @@
 apply plugin: 'java-library'
 
 
-version = '0.3a'
+version = '0.3.3a'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+// include resources dir
 sourceSets {
     main {
         resources {
@@ -22,6 +23,7 @@ sourceSets {
     }
 }
 
+// jar file creation
 jar {
     manifest {
         attributes 'Implementation-Title': 'Mishmash Library',
@@ -30,16 +32,19 @@ jar {
     }
 }
 
+// create sources jar
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    classifier = 'src'
     from sourceSets.main.allSource
 }
 
+// create javadoc jar
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    classifier = 'doc'
     from javadoc.destinationDir
 }
 
+// create sources and javadoc jar
 artifacts {
     archives sourcesJar
     archives javadocJar
