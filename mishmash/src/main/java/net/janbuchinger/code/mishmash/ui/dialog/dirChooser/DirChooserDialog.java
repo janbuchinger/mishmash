@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Jan Buchinger
+ * Copyright 2017-2018 Jan Buchinger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@ import net.janbuchinger.code.mishmash.ui.UIFx;
 import net.janbuchinger.code.mishmash.ui.dialog.DialogEscapeHook;
 import net.janbuchinger.code.mishmash.ui.userInput.JTextFieldWithPopUp;
 
-
 /**
  * <code>DirChooserDialog</code> is a <code>JDialog</code> that displays a
  * <code>JTree</code> representing the file system(s) available. Like the name
@@ -62,13 +61,13 @@ import net.janbuchinger.code.mishmash.ui.userInput.JTextFieldWithPopUp;
  * 
  */
 @SuppressWarnings("serial")
-public final class DirChooserDialog extends JDialog implements ActionListener, TreeWillExpandListener,
-		TreeSelectionListener, MouseListener {
+public final class DirChooserDialog extends JDialog
+		implements ActionListener, TreeWillExpandListener, TreeSelectionListener, MouseListener {
 
 	private JButton btOk, btCancel;
 	private JTree tree;
 	private JTextFieldWithPopUp lbPreview;
-//	private JLabel lbPreview;
+	// private JLabel lbPreview;
 	private TreePopupMenu treePopupMenu;
 	// private DefaultMutableTreeNode root;
 	// private JScrollPane spTree;
@@ -95,9 +94,9 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 	 * @param parent
 	 *            The parent frame this dialog is modal to.
 	 * @param expandPath
-	 *            The path to expand to after the dialog is opened. If
-	 *            expandPath is null or an empty String ("") the user home
-	 *            directory is automatically selected to expand to.
+	 *            The path to expand to after the dialog is opened. If expandPath is
+	 *            null or an empty String ("") the user home directory is
+	 *            automatically selected to expand to.
 	 */
 	public DirChooserDialog(Frame parent, String expandPath) {
 		super(parent, "Ordner Wählen", true);
@@ -115,9 +114,9 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 	 * @param parent
 	 *            The parent dialog this dialog is modal to.
 	 * @param expandPath
-	 *            The path to expand to after the dialog is opened. If
-	 *            expandPath is null or an empty String ("") the user home
-	 *            directory is automatically selected to expand to.
+	 *            The path to expand to after the dialog is opened. If expandPath is
+	 *            null or an empty String ("") the user home directory is
+	 *            automatically selected to expand to.
 	 */
 	public DirChooserDialog(Dialog parent, String expandPath) {
 		super(parent, "Ordner Wählen", true);
@@ -137,9 +136,9 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 	 * @param rootDir
 	 *            The root directory / node the tree expands from
 	 * @param expandPath
-	 *            The path to expand to after the dialog is opened. If
-	 *            expandPath is null or an empty String ("") the user home
-	 *            directory is automatically selected to expand to.
+	 *            The path to expand to after the dialog is opened. If expandPath is
+	 *            null or an empty String ("") the user home directory is
+	 *            automatically selected to expand to.
 	 */
 	public DirChooserDialog(Dialog parent, File rootDir, String expandPath) {
 		super(parent, "Ordner Wählen", true);
@@ -159,9 +158,9 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 	 * @param rootDir
 	 *            The root directory / node the tree expands from
 	 * @param expandPath
-	 *            The path to expand to after the dialog is opened. If
-	 *            expandPath is null or an empty String ("") the user home
-	 *            directory is automatically selected to expand to.
+	 *            The path to expand to after the dialog is opened. If expandPath is
+	 *            null or an empty String ("") the user home directory is
+	 *            automatically selected to expand to.
 	 */
 	public DirChooserDialog(Frame parent, File rootDir, String expandPath) {
 		super(parent, "Ordner Wählen", true);
@@ -194,7 +193,7 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 		JPanel pnButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		pnButtons.add(btCancel);
 		pnButtons.add(btOk);
-//		lbPreview = new JLabel(" ");
+		// lbPreview = new JLabel(" ");
 		lbPreview = new JTextFieldWithPopUp();
 		lbPreview.setEditable(false);
 
@@ -263,17 +262,17 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 		pnContent.add(treePanel, BorderLayout.CENTER);
 		pnContent.add(lbPreview, BorderLayout.SOUTH);
 		pnContent.setBorder(BorderFactory.createEmptyBorder(4, 4, 2, 4));
-		
+
 		JPanel pnContent2 = new JPanel(new BorderLayout());
 		pnContent2.add(pnContent, BorderLayout.CENTER);
 		pnContent2.add(pnButtons, BorderLayout.SOUTH);
-		
 
 		setContentPane(pnContent2);
 		UIFx.sizeAndCenter(this, parent, 0.3, 0.8);
 		UIFx.center(this, parent);
-		if (expFrm != null)
+		if (expFrm != null) {
 			expandPath(expFrm, path, expFrmIndex);
+		}
 		// setVisible(true);
 	}
 
@@ -310,8 +309,11 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 
 	private final File[] lsDirs(File f) {
 		File[] dirs = f.listFiles(new DirectoryFileFilter(treePopupMenu.showHiddenFolders()));
-		if (dirs != null)
+		if (dirs != null) {
 			Arrays.sort(dirs);
+		} else {
+			dirs = new File[0];
+		}
 		return dirs;
 	}
 
@@ -376,8 +378,8 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 
 	/**
 	 * Gets the user answer. By default <code>DirChooserDialog.CANCEL</code> is
-	 * returned. If the dialog is closed by clicking the ok button the answer
-	 * will be <code>DirChooserDialog.OK</code>.
+	 * returned. If the dialog is closed by clicking the ok button the answer will
+	 * be <code>DirChooserDialog.OK</code>.
 	 * 
 	 * @return <code>DirChooserDialog.CANCEL</code> or
 	 *         <code>DirChooserDialog.OK</code>.
@@ -403,11 +405,10 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 	 *         directory is returned. Else the full path is returned.
 	 */
 	public final String getRelativePath() {
-		if (relative){
+		if (relative) {
 			try {
 				return path.substring(rootFile.getAbsolutePath().length() + 1);
-			} catch (StringIndexOutOfBoundsException e) {
-			}
+			} catch (StringIndexOutOfBoundsException e) {}
 		}
 		return path;
 	}
@@ -445,9 +446,11 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 			DefaultMutableTreeNode node;
 			for (int i = 0; i < dirs.length; i++) {
 				node = new DefaultMutableTreeNode(dirs[i].getName());
-				if (node.toString().equals(path[1].toString())) {
-					expFrm = node;
-					expFrmIndex = 2;
+				if (path.length > 1) {
+					if (node.toString().equals(path[1].toString())) {
+						expFrm = node;
+						expFrmIndex = 2;
+					}
 				}
 				subDirs = lsDirs(dirs[i]);
 				if (subDirs == null)
@@ -480,7 +483,9 @@ public final class DirChooserDialog extends JDialog implements ActionListener, T
 		treePanel.removeAll();
 		treePanel.add(UIFx.initScrollPane(tree, 15), BorderLayout.CENTER);
 		treePanel.revalidate();
-		expandPath(expFrm, path, expFrmIndex);
+		if (expFrm != null) {
+			expandPath(expFrm, path, expFrmIndex);
+		}
 	}
 
 	@Override
