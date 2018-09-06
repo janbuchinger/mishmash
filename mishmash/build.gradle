@@ -9,8 +9,7 @@
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
 
-
-version = '0.3.3a'
+version = '0.3.5a'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
@@ -34,13 +33,13 @@ jar {
 
 // create sources jar
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'src'
+    classifier = 'sources'
     from sourceSets.main.allSource
 }
 
 // create javadoc jar
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'doc'
+    classifier = 'javadoc'
     from javadoc.destinationDir
 }
 
