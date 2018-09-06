@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Jan Buchinger
+ * Copyright 2017-2018 Jan Buchinger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,15 @@ import java.io.IOException;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.Document;
 
 /**
- * <code>JTextFieldWithPopUp</code> is a JTextfield that offers the customary
- * text editing functions cut, copy and paste via a <code>JPopupMenu</code>,
- * triggered by right clicking. It also implements <code>ComboBoxEditor</code>
- * for use in <code>JComboBox</code>.
+ * <code>JTextFieldWithPopUp</code> is a <code>JTextField</code> that offers the
+ * customary text editing functions cut, copy and paste via a
+ * <code>JPopupMenu</code>, triggered by right clicking. It also implements
+ * <code>ComboBoxEditor</code> for use in <code>JComboBox</code>.
  * 
  * @author Jan Buchinger
  * 
@@ -51,71 +52,77 @@ public class JTextFieldWithPopUp extends JTextField implements ActionListener, C
 	private boolean isInitiated = false;
 
 	/**
-	 * Constructs a new <code>JTextFieldWithPopUp</code>. A default model is
-	 * created, the initial string is null, and the number of columns is set to
-	 * 0.
+	 * From <code>JTextField</code> Javadoc: Constructs a new <code>JTextField</code>. A
+	 * default model is created, the initial string is null, and the number of
+	 * columns is set to 0.
+	 * 
+	 * @see JTextField
 	 */
 	public JTextFieldWithPopUp() {
 		this(0);
 	}
 
 	/**
-	 * Constructs a new empty <code>JTextFieldWithPopUp</code> with the
-	 * specified number of columns. A default model is created and the initial
-	 * string is set to null.
+	 * From <code>JTextField</code> Javadoc: Constructs a new empty <code>JTextField</code>
+	 * with the specified number of columns. A default model is created and the
+	 * initial string is set to null.
 	 * 
 	 * @param columns
-	 *            The number of columns to use to calculate the preferred width;
-	 *            if columns is set to zero, the preferred width will be
-	 *            whatever naturally results from the component implementation.
+	 *            The number of columns to use to calculate the preferred width; if
+	 *            columns is set to zero, the preferred width will be whatever
+	 *            naturally results from the component implementation.
+	 * @see JTextField
 	 */
 	public JTextFieldWithPopUp(int columns) {
 		this(null, columns);
 	}
 
 	/**
-	 * Constructs a new <code>JTextFieldWithPopUp</code> initialized with the
-	 * specified text. A default model is created and the number of columns is
-	 * 0.
+	 * From <code>JTextField</code> Javadoc: Constructs a new <code>JTextField</code>
+	 * initialized with the specified text. A default model is created and the
+	 * number of columns is 0.
 	 * 
 	 * @param text
 	 *            The text to be displayed, or <code>null</code>.
+	 * @see JTextField
 	 */
 	public JTextFieldWithPopUp(String text) {
 		this(text, 0);
 	}
 
 	/**
-	 * Constructs a new <code>JTextFieldWithPopUp</code> initialized with the
-	 * specified text and columns. A default model is created.
+	 * From <code>JTextField</code> Javadoc: Constructs a new <code>JTextField</code>
+	 * initialized with the specified text and columns. A default model is created.
 	 * 
 	 * @param text
 	 *            The text to be displayed, or <code>null</code>.
 	 * @param columns
-	 *            The number of columns to use to calculate the preferred width;
-	 *            if columns is set to zero, the preferred width will be
-	 *            whatever naturally results from the component implementation.
+	 *            The number of columns to use to calculate the preferred width; if
+	 *            columns is set to zero, the preferred width will be whatever
+	 *            naturally results from the component implementation.
+	 * @see JTextField
 	 */
 	public JTextFieldWithPopUp(String text, int columns) {
 		this(null, text, columns);
 	}
 
 	/**
-	 * Constructs a new <code>JTextFieldWithPopUp</code> that uses the given
-	 * text storage model and the given number of columns. This is the
-	 * constructor through which the other constructors feed. If the document is
+	 * From <code>JTextField</code> Javadoc: Constructs a new <code>JTextField</code> that
+	 * uses the given text storage model and the given number of columns. This is
+	 * the constructor through which the other constructors feed. If the document is
 	 * <code>null</code>, a default model is created.
 	 * 
 	 * @param doc
-	 *            The text storage to use; if this is <code>null</code>, a
-	 *            default will be provided by calling the
-	 *            <code>createDefaultModel</code> method.
+	 *            The text storage to use; if this is <code>null</code>, a default
+	 *            will be provided by calling the <code>createDefaultModel</code>
+	 *            method.
 	 * @param text
 	 *            The text to be displayed, or <code>null</code>.
 	 * @param columns
-	 *            The number of columns to use to calculate the preferred width;
-	 *            if columns is set to zero, the preferred width will be
-	 *            whatever naturally results from the component implementation.
+	 *            The number of columns to use to calculate the preferred width; if
+	 *            columns is set to zero, the preferred width will be whatever
+	 *            naturally results from the component implementation.
+	 * @see JTextField
 	 */
 	public JTextFieldWithPopUp(Document doc, String text, int columns) {
 		super(doc, text, columns);
@@ -140,8 +147,8 @@ public class JTextFieldWithPopUp extends JTextField implements ActionListener, C
 	}
 
 	/**
-	 * {@inheritDoc} Also the <code>JMenuItem</code>s cut and paste are enabled
-	 * or disabled.
+	 * {@inheritDoc} Also the <code>JMenuItem</code>s cut and paste are enabled or
+	 * disabled.
 	 */
 	@Override
 	public void setEditable(boolean editable) {
@@ -216,21 +223,21 @@ public class JTextFieldWithPopUp extends JTextField implements ActionListener, C
 	 * {@inheritDoc}
 	 * 
 	 * @param anObject
-	 *            Preferably a <code>String</code> value. If the
-	 *            <code>Object</code> passed is not an instance of
-	 *            <code>String</code> the <code>toString</code> method is used.
-	 *            If <code>null</code> is passed an empty <code>String</code> is
-	 *            set.
+	 *            Preferably a <code>String</code> value. If the <code>Object</code>
+	 *            passed is not an instance of <code>String</code> the
+	 *            <code>toString</code> method is used. If <code>null</code> is
+	 *            passed an empty <code>String</code> is set.
 	 */
 	@Override
 	public void setItem(Object anObject) {
 		if (anObject instanceof String) {
 			setText((String) anObject);
 		} else {
-			if (anObject != null)
+			if (anObject != null) {
 				setText(anObject.toString());
-			else
+			} else {
 				setText("");
+			}
 		}
 	}
 
