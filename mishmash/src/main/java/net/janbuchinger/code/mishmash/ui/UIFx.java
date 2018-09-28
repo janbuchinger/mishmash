@@ -21,6 +21,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JComponent;
@@ -35,6 +36,46 @@ import javax.swing.ScrollPaneConstants;
  * 
  */
 public class UIFx {
+	/**
+	 * Singleton of decimal number format with 2 fraction digits and
+	 * <code>NumberFormat.setGroupingUsed(true)</code>.
+	 */
+	private static NumberFormat nfDecimal;
+	/**
+	 * Singleton of integer number format with
+	 * <code>NumberFormat.setGroupingUsed(true)</code>.
+	 */
+	private static NumberFormat nfInteger;
+	/**
+	 * Singleton of very precise date time format
+	 * 
+	 * @see UIFx#getVeryPreciseDateTimeFormat()
+	 */
+	private static SimpleDateFormat sdfDateTimeVeryPrecise;
+	/**
+	 * Singleton of precise date time format
+	 * 
+	 * @see UIFx#getPreciseDateTimeFormat()
+	 */
+	private static SimpleDateFormat sdfDateTimePrecise;
+	/**
+	 * Singleton of date time format
+	 * 
+	 * @see UIFx#getDateTimeFormat()
+	 */
+	private static SimpleDateFormat sdfDateTime;
+	/**
+	 * Singleton of date format
+	 * 
+	 * @see UIFx#getDateFormat()
+	 */
+	private static SimpleDateFormat sdfDate;
+	/**
+	 * Singleton of time format
+	 * 
+	 * @see UIFx#getTimeFormat()
+	 */
+	private static SimpleDateFormat sdfTime;
 
 	/**
 	 * Formats the specified time in milliseconds as HH:mm:ss.
@@ -54,8 +95,9 @@ public class UIFx {
 		hours = minutes / 60;
 		minutes = minutes % 60;
 
-		return (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":"
-				+ (seconds < 10 ? "0" : "") + seconds;
+		return (hours < 10 ? "0" : "").concat(Long.toString(hours)).concat(":")
+				.concat((minutes < 10 ? "0" : "")).concat(Long.toString(minutes)).concat(":")
+				.concat((seconds < 10 ? "0" : "")).concat(Long.toString(seconds));
 	}
 
 	/**
@@ -77,16 +119,17 @@ public class UIFx {
 		hours = minutes / 60;
 		minutes = minutes % 60;
 
-		return (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":"
-				+ (seconds < 10 ? "0" : "") + seconds + "." + (millis < 10 ? "00" : millis < 100 ? "0" : "")
-				+ millis;
+		return (hours < 10 ? "0" : "").concat(Long.toString(hours)).concat(":")
+				.concat((minutes < 10 ? "0" : "")).concat(Long.toString(minutes)).concat(":")
+				.concat((seconds < 10 ? "0" : "")).concat(Long.toString(seconds)).concat(".")
+				.concat((millis < 10 ? "00" : millis < 100 ? "0" : "")).concat(Long.toString(millis));
 	}
 
 	/**
-	 * Initiates a new <code>GridBagConstraints</code> with gridx = 0, gridy =
-	 * 0, gridwidth = 1, gridheight = 1, weightx = 0, weighty = 0, anchor =
-	 * center, fill = horizontal, insets = (top = 0, left = 2, bottom = 2, right
-	 * = 0), ipadx = 0, ipady = 0
+	 * Initiates a new <code>GridBagConstraints</code> with gridx = 0, gridy = 0,
+	 * gridwidth = 1, gridheight = 1, weightx = 0, weighty = 0, anchor = center,
+	 * fill = horizontal, insets = (top = 0, left = 2, bottom = 2, right = 0), ipadx
+	 * = 0, ipady = 0
 	 * 
 	 * @return A default new <code>GridBagConstraints</code>.
 	 */
@@ -117,8 +160,8 @@ public class UIFx {
 	}
 
 	/**
-	 * Initializes a Vertical scroll only <code>JScrollPane</code> with a
-	 * preferred size.
+	 * Initializes a Vertical scroll only <code>JScrollPane</code> with a preferred
+	 * size.
 	 * 
 	 * @param component
 	 *            The <code>JComponent</code> that will be put inside the
@@ -166,8 +209,8 @@ public class UIFx {
 	}
 
 	/**
-	 * Initializes a <code>JScrollPane</code> That shows scroll bars as needed
-	 * with a preferred size.
+	 * Initializes a <code>JScrollPane</code> That shows scroll bars as needed with
+	 * a preferred size.
 	 * 
 	 * @param component
 	 *            The <code>JComponent</code> that will be put inside the
@@ -196,8 +239,8 @@ public class UIFx {
 	}
 
 	/**
-	 * Initializes and returns a <code>JScrollPane</code> That shows scroll bars
-	 * as needed.
+	 * Initializes and returns a <code>JScrollPane</code> That shows scroll bars as
+	 * needed.
 	 * 
 	 * @param component
 	 *            The <code>JComponent</code> that will be put inside the
@@ -282,7 +325,8 @@ public class UIFx {
 	 * @param relativeHeight
 	 *            the relative height between 0 and 1.
 	 */
-	public static void sizeAndCenter(Window subject, Window parent, double relativeWidth, double relativeHeight) {
+	public static void sizeAndCenter(Window subject, Window parent, double relativeWidth,
+			double relativeHeight) {
 		Dimension scr = Toolkit.getDefaultToolkit().getScreenSize();
 		subject.setSize((int) (relativeWidth * scr.width), (int) (relativeHeight * scr.height));
 		subject.setLocation(parent.getLocation().x + parent.getWidth() / 2 - subject.getWidth() / 2,
@@ -311,6 +355,63 @@ public class UIFx {
 	public static void center(Window window, Window owner) {
 		window.setLocation(owner.getLocation().x + owner.getWidth() / 2 - window.getWidth() / 2,
 				owner.getLocation().y + owner.getHeight() / 2 - window.getHeight() / 2);
+	}
+
+	/**
+	 * Initializes a new decimal number format with 2 fraction digits and
+	 * <code>NumberFormat.setGroupingUsed(true)</code>.
+	 * 
+	 * @return a new decimal number format with 2 fraction digits and
+	 *         <code>NumberFormat.setGroupingUsed(true)</code>.
+	 */
+	public static NumberFormat initDecimalFormat() {
+		NumberFormat nfDecimal = NumberFormat.getInstance();
+		nfDecimal.setMaximumFractionDigits(2);
+		nfDecimal.setMinimumFractionDigits(2);
+		nfDecimal.setGroupingUsed(true);
+		return nfDecimal;
+	}
+
+	/**
+	 * Gets the singleton object of a decimal number format with 2 fraction digits
+	 * and <code>NumberFormat.setGroupingUsed(true)</code>.
+	 * 
+	 * @return singleton object of a decimal number format with 2 fraction digits
+	 *         and <code>NumberFormat.setGroupingUsed(true)</code>.
+	 */
+	public static NumberFormat getDecimalFormat() {
+		if (nfDecimal == null) {
+			nfDecimal = initDecimalFormat();
+		}
+		return nfDecimal;
+	}
+
+	/**
+	 * Initializes a new integer number format with
+	 * <code>NumberFormat.setGroupingUsed(true)</code>.
+	 * 
+	 * @return a new integer number format with
+	 *         <code>NumberFormat.setGroupingUsed(true)</code>.
+	 */
+	public static NumberFormat initIntegerFormat() {
+		NumberFormat nfInteger = NumberFormat.getInstance();
+		nfInteger.setMaximumFractionDigits(0);
+		nfInteger.setGroupingUsed(true);
+		return nfInteger;
+	}
+
+	/**
+	 * Gets the singleton object of an integer number format with
+	 * <code>NumberFormat.setGroupingUsed(true)</code>.
+	 * 
+	 * @return singleton object of an integer number format with
+	 *         <code>NumberFormat.setGroupingUsed(true)</code>.
+	 */
+	public static NumberFormat getIntegerFormat() {
+		if (nfInteger == null) {
+			nfInteger = initIntegerFormat();
+		}
+		return nfInteger;
 	}
 
 	/**
@@ -354,12 +455,75 @@ public class UIFx {
 	}
 
 	/**
-	 * Creates a new <code>SimpleDateFormat</code> with the pattern String
-	 * "HH:mm" (15:25).
+	 * Creates a new <code>SimpleDateFormat</code> with the pattern String "HH:mm"
+	 * (15:25).
 	 * 
 	 * @return A new <code>SimpleDateFormat</code> for display purposes.
 	 */
 	public static SimpleDateFormat initDisplayTimeFormat() {
 		return new SimpleDateFormat("HH:mm");
+	}
+
+	/**
+	 * Gets the singleton object of very precise date time format (dd.MM.yyyy
+	 * HH:mm:ss.SSS)
+	 * 
+	 * @return a <code>SimpleDateFormat</code> that formats like "dd.MM.yyyy
+	 *         HH:mm:ss.SSS"
+	 */
+	public static SimpleDateFormat getVeryPreciseDateTimeFormat() {
+		if (sdfDateTimeVeryPrecise == null) {
+			sdfDateTimeVeryPrecise = initVeryPreciseDisplayDateTimeFormat();
+		}
+		return sdfDateTimeVeryPrecise;
+	}
+
+	/**
+	 * Gets the singleton object of precise date time format (dd.MM.yyyy HH:mm:ss)
+	 * 
+	 * @return a <code>SimpleDateFormat</code> that formats like "dd.MM.yyyy
+	 *         HH:mm:ss"
+	 */
+	public static SimpleDateFormat getPreciseDateTimeFormat() {
+		if (sdfDateTimePrecise == null) {
+			sdfDateTimePrecise = initPreciseDisplayDateTimeFormat();
+		}
+		return sdfDateTimePrecise;
+	}
+
+	/**
+	 * Gets the singleton object of date time format (dd.MM.yyyy HH:mm)
+	 * 
+	 * @return a <code>SimpleDateFormat</code> that formats like "dd.MM.yyyy HH:mm"
+	 */
+	public static SimpleDateFormat getDateTimeFormat() {
+		if (sdfDateTime == null) {
+			sdfDateTime = initDisplayDateTimeFormat();
+		}
+		return sdfDateTime;
+	}
+
+	/**
+	 * Gets the singleton object of date format (dd.MM.yyyy)
+	 * 
+	 * @return a <code>SimpleDateFormat</code> that formats like "dd.MM.yyyy"
+	 */
+	public static SimpleDateFormat getDateFormat() {
+		if (sdfDate == null) {
+			sdfDate = initDisplayDateFormat();
+		}
+		return sdfDate;
+	}
+
+	/**
+	 * Gets the singleton object of time format (HH:mm)
+	 * 
+	 * @return a <code>SimpleDateFormat</code> that formats like "HH:mm"
+	 */
+	public static SimpleDateFormat getTimeFormat() {
+		if (sdfTime == null) {
+			sdfTime = initDisplayTimeFormat();
+		}
+		return sdfTime;
 	}
 }
