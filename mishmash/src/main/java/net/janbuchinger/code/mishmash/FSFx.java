@@ -39,9 +39,21 @@ import java.util.zip.ZipOutputStream;
  * 
  */
 public final class FSFx {
+	private static NumberFormat nf;
+
+	private static void initNumberFormat() {
+		if (nf == null) {
+			nf = NumberFormat.getInstance();
+			nf.setMinimumFractionDigits(2);
+			nf.setMaximumFractionDigits(2);
+			nf.setGroupingUsed(true);
+		}
+	}
 
 	/**
-	 * Formats a file length according its binary magnitude. The magnitudes are
+	 * Formats a file length according its binary magnitude.
+	 * <p>
+	 * The magnitudes are:
 	 * <ul>
 	 * <li>bytes
 	 * <li>KiB: kibibyte (1024 bytes)
@@ -56,9 +68,8 @@ public final class FSFx {
 	 * 
 	 * @param length
 	 *            The data length to format.
-	 * @return A file length formatted according to its magnitude with two
-	 *         fraction digits followed by a multiplier descriptor like
-	 *         "2,95 MiB".
+	 * @return A file length formatted according to its magnitude with two fraction
+	 *         digits followed by a multiplier descriptor like "2,95 MiB".
 	 */
 	public static final String formatFileLength(double length) {
 		String s = "";
@@ -66,35 +77,134 @@ public final class FSFx {
 
 		boolean inv = length < 0;
 
-		if (inv)
+		if (inv) {
 			length = length * -1;
-
-		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMinimumFractionDigits(2);
-		nf.setMaximumFractionDigits(2);
-		nf.setGroupingUsed(true);
-
-		if (length > (x = Math.pow(1024, 8))) {
-			s = nf.format(length / x) + " YiB";
-		} else if (length > (x = Math.pow(1024, 7))) {
-			s = nf.format(length / x) + " ZiB";
-		} else if (length > (x = Math.pow(1024, 6))) {
-			s = nf.format(length / x) + " EiB";
-		} else if (length > (x = Math.pow(1024, 5))) {
-			s = nf.format(length / x) + " PiB";
-		} else if (length > (x = Math.pow(1024, 4))) {
-			s = nf.format(length / x) + " TiB";
-		} else if (length > (x = Math.pow(1024, 3))) {
-			s = nf.format(length / x) + " GiB";
-		} else if (length > (x = Math.pow(1024, 2))) {
-			s = nf.format(length / x) + " MiB";
-		} else if (length > (x = Math.pow(1024, 1))) {
-			s = nf.format(length / x) + " KiB";
-		} else {
-			s = (int) length + " bytes";
 		}
 
-		return (inv ? "-" : "") + s;
+		initNumberFormat();
+
+		if (length > (x = Math.pow(1024, 8))) {
+			s = nf.format((double) length / x).concat(" YiB");
+		} else if (length >= (x = Math.pow(1024, 7))) {
+			s = nf.format((double) length / x).concat(" ZiB");
+		} else if (length >= (x = Math.pow(1024, 6))) {
+			s = nf.format((double) length / x).concat(" EiB");
+		} else if (length >= (x = Math.pow(1024, 5))) {
+			s = nf.format((double) length / x).concat(" PiB");
+		} else if (length >= (x = Math.pow(1024, 4))) {
+			s = nf.format((double) length / x).concat(" TiB");
+		} else if (length >= (x = Math.pow(1024, 3))) {
+			s = nf.format((double) length / x).concat(" GiB");
+		} else if (length >= (x = Math.pow(1024, 2))) {
+			s = nf.format((double) length / x).concat(" MiB");
+		} else if (length >= (x = Math.pow(1024, 1))) {
+			s = nf.format((double) length / x).concat(" KiB");
+		} else {
+			s = Integer.toString((int) length).concat(" bytes");
+		}
+
+		return (inv ? "-" : "").concat(s);
+	}
+
+	/**
+	 * Formats transferred file length per second. This method uses
+	 * <code>System.currentTimeMillis()</code>, so it should be called immediately
+	 * after the transfer succeeded.
+	 * 
+	 * @param tStart
+	 *            The file transfer start time in milliseconds
+	 * @param bytesCopied
+	 *            The bytes copied since tStart
+	 * @return the file length per second like
+	 *         <code>formatFileLength(bytesCopied / seconds).concat("/s")</code>
+	 * @see FSFx#formatFileLength(double)
+	 */
+	public final static String formatTransferSpeed(long tStart, long bytesCopied) {
+		try {
+			return FSFx.formatFileLength(bytesCopied / ((System.currentTimeMillis() - tStart) / 1000.0))
+					.concat("/s");
+		} catch (Exception e) {
+			return "0 bytes/s";
+		}
+	}
+
+	/**
+	 * Formats a file length according its decimal magnitude.
+	 * <p>
+	 * The magnitudes are:
+	 * <ul>
+	 * <li>bytes
+	 * <li>kB: kilobyte (1000 bytes)
+	 * <li>MB: megabyte (1000<sup>2</sup> bytes)
+	 * <li>GB: gigabyte (1000<sup>3</sup> bytes)
+	 * <li>TB: terabyte (1000<sup>4</sup> bytes)
+	 * <li>PB: petabyte (1000<sup>5</sup> bytes)
+	 * <li>EB: exabyte (1000<sup>6</sup> bytes)
+	 * <li>ZB: zettabyte (1000<sup>7</sup> bytes)
+	 * <li>YB: yottabyte (1000<sup>8</sup> bytes)
+	 * </ul>
+	 * 
+	 * @param length
+	 *            The data length to format.
+	 * @return A file length formatted according to its magnitude with two fraction
+	 *         digits followed by a multiplier descriptor like "2,95 MB".
+	 */
+	public static final String formatFileLengthDec(double length) {
+		String s = "";
+		double x;
+
+		boolean inv = length < 0;
+
+		if (inv) {
+			length = length * -1;
+		}
+
+		initNumberFormat();
+
+		if (length > (x = Math.pow(1000, 8))) {
+			s = nf.format((double) length / x).concat(" YB");
+		} else if (length >= (x = Math.pow(1000, 7))) {
+			s = nf.format((double) length / x).concat(" ZB");
+		} else if (length >= (x = Math.pow(1000, 6))) {
+			s = nf.format((double) length / x).concat(" EB");
+		} else if (length >= (x = Math.pow(1000, 5))) {
+			s = nf.format((double) length / x).concat(" PB");
+		} else if (length >= (x = Math.pow(1000, 4))) {
+			s = nf.format((double) length / x).concat(" TB");
+		} else if (length >= (x = Math.pow(1000, 3))) {
+			s = nf.format((double) length / x).concat(" GB");
+		} else if (length >= (x = Math.pow(1000, 2))) {
+			s = nf.format((double) length / x).concat(" MB");
+		} else if (length >= (x = Math.pow(1000, 1))) {
+			s = nf.format((double) length / x).concat(" kB");
+		} else {
+			s = Integer.toString((int) length).concat(" bytes");
+		}
+
+		return (inv ? "-" : "").concat(s);
+
+	}
+
+	/**
+	 * Formats transferred file length per second. This method uses
+	 * <code>System.currentTimeMillis()</code>, so it should be called immediately
+	 * after the transfer succeeded.
+	 * 
+	 * @param tStart
+	 *            The file transfer start time in milliseconds
+	 * @param bytesCopied
+	 *            The bytes copied since tStart
+	 * @return the file length per second like
+	 *         <code>formatFileLengthDec(bytesCopied / seconds).concat("/s")</code>
+	 * @see FSFx#formatFileLengthDec(double)
+	 */
+	public final static String formatTransferSpeedDec(long tStart, long bytesCopied) {
+		try {
+			return FSFx.formatFileLengthDec(bytesCopied / ((System.currentTimeMillis() - tStart) / 1000.0))
+					.concat("/s");
+		} catch (Exception e) {
+			return "0 bytes/s";
+		}
 	}
 
 	/**
@@ -105,8 +215,7 @@ public final class FSFx {
 	 *            The Vector of Files to be zipped.
 	 * @param target
 	 *            The zip file
-	 * @return A boolean[] indicating zipping success of the corresponding
-	 *         files.
+	 * @return A boolean[] indicating zipping success of the corresponding files.
 	 */
 	public static boolean[] createFlatZip(Vector<File> files, File target) {
 
@@ -118,7 +227,7 @@ public final class FSFx {
 		// input file
 		FileInputStream in = null;
 
-		// out put file
+		// output file
 		ZipOutputStream out = null;
 		try {
 			out = new ZipOutputStream(new FileOutputStream(target));
@@ -181,12 +290,12 @@ public final class FSFx {
 	 *            The file to be hidden.
 	 */
 	public final static void hideWindowsFile(File f) {
-		Path p = Paths.get(f.getAbsolutePath());
+		Path p = Paths.get(f.getPath());
 		try {
-			Files.setAttribute(p, "dos:hidden", true);
-		} catch (IOException e1) {
-			// e1.printStackTrace();
-		}
+			if (PropFx.osName().toLowerCase().startsWith("win")) {
+				Files.setAttribute(p, "dos:hidden", true);
+			}
+		} catch (IOException e1) {}
 	}
 
 	/**
@@ -194,25 +303,40 @@ public final class FSFx {
 	 * 
 	 * @param directory
 	 *            The directory to check.
-	 * @return <code>true</code> if the specified directory has any entries.
-	 * @throws IOException
-	 *             when there is a problem with the specified directory or
-	 *             closing the stream.
+	 * @return <code>true</code> only if the specified file exists, is a directory
+	 *         and has entries.
 	 */
-	public final static boolean hasDirEntries(Path directory) throws IOException {
-		DirectoryStream<Path> ds = Files.newDirectoryStream(directory);
-		boolean b = true;
+	public final static boolean hasDirEntries(File directory) {
+		return hasDirEntries(directory.toPath());
+	}
+
+	/**
+	 * Checks whether a directory has any entries.
+	 * 
+	 * @param directory
+	 *            The directory to check.
+	 * @return <code>true</code> only if the specified path exists, is a directory
+	 *         and has entries.
+	 */
+	public final static boolean hasDirEntries(Path directory) {
+		DirectoryStream<Path> ds = null;
+		boolean b = false;
 		try {
+			ds = Files.newDirectoryStream(directory);
 			b = ds.iterator().hasNext();
-		} finally {
-			if (ds != null)
-				ds.close();
+		} catch (Exception e) {} finally {
+			if (ds != null) {
+				try {
+					ds.close();
+				} catch (IOException e) {}
+			}
 		}
 		return b;
 	}
 
 	/**
-	 * Copies a resource that is bundled with the program to an external file.
+	 * Copies a resource that is bundled with the program to an external file. The
+	 * parent file path is being created if it does not exist yet.
 	 * 
 	 * @param from
 	 *            The class to locate the resource from.
@@ -220,12 +344,16 @@ public final class FSFx {
 	 *            The resource name relative to the specified class.
 	 * @param to
 	 *            The new File to copy to.
-	 * @return true if copying was successful.
+	 * @return true only if the copying was successful. false if the parent
+	 *         directory could not be created or an Exception is thrown during
+	 *         copying the file.
 	 */
 	public final static boolean copyResourceFile(@SuppressWarnings("rawtypes") Class from, String fromName,
 			File to) {
 		if (!to.getParentFile().exists()) {
-			to.getParentFile().mkdirs();
+			if (!to.getParentFile().mkdirs()) {
+				return false;
+			}
 		}
 		InputStream stream = null;
 		OutputStream resStreamOut = null;
